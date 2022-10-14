@@ -31,14 +31,13 @@ void sigchld_handler(int signum) {
     int status;
     pid_t pid = waitpid(0, &status, WNOHANG);
     if (pid<0) return;
-    // printf("bkg_notice %d\n",pid);
     if (find_pid(&bkg_process_list, pid)) {
         if (status==0) {
             fprintf(stdout, "\n%s Done\n$$ 3230shell ## ", find_pid(&bkg_process_list, pid)->arg0);
             fflush(stdout);
         }
         else if (WIFSIGNALED(status)) {
-            fprintf(stdout, "\n%s Stopped by signal %d\n$$ 3230shell ## ", find_pid(&bkg_process_list, pid)->arg0, WIFSIGNALED(status));
+            fprintf(stdout, "\n%s Stopped by signal %s\n$$ 3230shell ## ", find_pid(&bkg_process_list, pid)->arg0, strsignal(WTERMSIG(status)));
             fflush(stdout);
         }
         delete_process(&bkg_process_list, pid);

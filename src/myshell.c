@@ -36,7 +36,6 @@ int main() {
         if (parse_result >= 0) {
             int exec_result = exec(processes, parse_result, &is_timeX, &has_pipe, &is_bkg); 
         }
-
     }    
 
     return 0;

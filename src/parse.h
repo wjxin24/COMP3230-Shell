@@ -1,12 +1,6 @@
 #ifndef PARSE_H
 #define PARSE_H
 
-// typedef struct Process {
-//     struct Process *next; // pointer to the next process after a pipe
-//     int ispipe; // if the process is in a pipe
-//     char **args; // arguments of the process command
-    
-// } Process;
 
 #define MAX_PROCESS_NUM 5
 #define MAX_STRING_NUM 30
