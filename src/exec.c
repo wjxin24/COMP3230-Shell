@@ -88,7 +88,7 @@ int exec_process(char **arg, flag *is_timeX, flag *is_bkg, int in, int out) {
             }
         
             // foreground child process
-            if (!*is_bkg) { 
+            if (!find_pid(&bkg_process_list, pid)) { 
                 if (*is_timeX) {
                     struct tms end_time;
                     times(&end_time);
@@ -104,6 +104,7 @@ int exec_process(char **arg, flag *is_timeX, flag *is_bkg, int in, int out) {
                 return 0;
             }
         }
+        return 0;
         
     }
 }

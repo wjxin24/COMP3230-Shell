@@ -7,11 +7,23 @@
 int parseline(char *input, char ***processes, flag *is_timeX, flag *has_pipe, flag *is_bkg) {
     int processnum = 0;
     int argc = 0;
-    // printf("len(s):%lu\n",strlen(input));
     processes[processnum] = malloc(strlen(input)*sizeof(char*));
     char* modified_input;
     modified_input = malloc(strlen(input)*sizeof(char));
     strcpy(modified_input, input);
+    
+    // check background process
+    if (modified_input[strlen(input)-1] == '&') {
+        *is_bkg = 1;
+        modified_input[strlen(input)-1] = '\0';
+        int bk = '&';
+        char *p_bk = strchr(modified_input, bk);
+        if (p_bk != NULL) {
+            printf("3230shell: '&' should not appear in the middle of the command line\n");
+            return ERROR;
+        }
+    }
+   
     const char space[2] = " ";
     char *p = strtok(modified_input, space);
     if (p[0]=='|') {
@@ -23,27 +35,12 @@ int parseline(char *input, char ***processes, flag *is_timeX, flag *has_pipe, fl
             processes[processnum][argc] = (char *) malloc(strlen(p)*sizeof(char));
             processes[processnum][argc++] = p;
         }
-        if (p[0]=='&') {
-            // check if there is other commands after &
-            p = strtok(NULL, space);
-            if (p==NULL) {
-                *is_bkg = 1;
-                break;
-            }
-            else {
-                printf("3230shell: '&' should not appear in the middle of the command line\n");
-                return ERROR;
-            }
-        }
+        
         if (p[0]=='|') {
             // read the command after the pipe
             p = strtok(NULL, space);
             if (p==NULL) {
                 printf("3230shell: should not have | as the last character on the input line\n");
-                return ERROR;
-            }
-            if (p[0]=='&') {
-                printf("3230shell: should have a command after |\n");
                 return ERROR;
             }
             if (p[0]=='|') {
@@ -89,15 +86,6 @@ int parseline(char *input, char ***processes, flag *is_timeX, flag *has_pipe, fl
         printf("3230shell: \"timeX\" cannot be run in background mode\n");
         return ERROR;
     }
-
-    // printf("---PARSE:processes: %p---\n", processes);
-    // for (int i = 0 ; i<=processnum; i++) {
-    //     printf("process %d\n",i);
-    //     for (int j =0; processes[i][j] != NULL; j++) {
-    //         printf("%lu:",strlen(processes[i][j]));
-    //         printf("%s\n",processes[i][j]);
-    //     }
-    // }
 
     return processnum;
 }

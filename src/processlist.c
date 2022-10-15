@@ -45,13 +45,3 @@ bool delete_process(Processlist *process_list, pid_t pid) {
     }
     return true;
 }
-
-void printList(Processlist *process_list) {
-    Process *ptr = process_list->head;
-    printf("[");
-    while(ptr != NULL) {
-        printf("(%d,%s) ",ptr->pid,ptr->arg0);
-        ptr = ptr->next;
-    }       
-    printf("]");
-}

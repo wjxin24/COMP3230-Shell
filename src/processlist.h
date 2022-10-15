@@ -23,6 +23,5 @@ typedef struct Processlist Processlist;
 void add_process(Processlist *process_list, pid_t pid, char *arg0);
 Process* find_pid(Processlist *process_list, pid_t pid);
 bool delete_process(Processlist *process_list, pid_t pid);
-void printList(Processlist *process_list);
 
 #endif
